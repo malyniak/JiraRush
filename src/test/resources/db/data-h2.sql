@@ -93,3 +93,68 @@ CREATE TABLE IF NOT EXISTS PROFILE (
 insert into PROFILE (ID, LAST_FAILED_LOGIN, LAST_LOGIN, MAIL_NOTIFICATIONS)
 values (1, null, null, 49),
        (2, null, null, 14);
+
+create table IF NOT EXISTS PROJECT
+(
+    ID bigint primary key,
+    CODE        varchar(32)   not null
+        constraint UK_PROJECT_CODE unique,
+    TITLE       varchar(1024) not null,
+    DESCRIPTION varchar(4096) not null,
+    TYPE_CODE   varchar(32)   not null,
+    STARTPOINT  timestamp,
+    ENDPOINT    timestamp,
+    PARENT_ID   bigint,
+    constraint FK_PROJECT_PARENT foreign key (PARENT_ID) references PROJECT (ID) on delete cascade
+);
+
+insert into PROJECT (code, title, description, type_code, parent_id)
+values ('JiraRush', 'JiraRush', '«Mini-JIRA» app : project management system tutorial app', 'task_tracker', null),
+       ('Test_Project', 'Test Project', 'Just test project', 'task_tracker', null),
+       ('Test_Project_2', 'Test Project 2', 'Just test project 2', 'task_tracker', null),
+       ('JiraRush sub', 'JiraRush subproject', 'subproject', 'task_tracker', 1);
+
+create table IF NOT EXISTS SPRINT
+(
+    ID bigint primary key,
+    STATUS_CODE varchar(32)   not null,
+    STARTPOINT  timestamp,
+    ENDPOINT    timestamp,
+    CODE        varchar(512) not null,
+    TITLE       varchar(1024) not null,
+    PROJECT_ID  bigint        not null,
+    constraint FK_SPRINT_PROJECT foreign key (PROJECT_ID) references PROJECT (ID) on delete cascade
+
+
+);
+
+insert into SPRINT (status_code, startpoint, endpoint, code, TITLE,  project_id)
+values ('active', null, null, 'code',  'Sprint-2', 1),
+       ('finished', '2023-04-09 08:05:10', '2023-04-29 16:48:34', 'code', 'Sprint-1', 2),
+       ('finished', '2023-04-03 12:14:11', '2023-04-18 17:03:41', 'code', 'Sprint-2', 2),
+       ('active', '2023-04-05 14:25:43', '2023-06-10 13:00:00', 'code', 'Sprint-3', 2),
+       ('active', null, null, 'code', 'Sprint-1', 4);
+
+CREATE TABLE IF NOT EXISTS TASK (
+                                    ID BIGINT AUTO_INCREMENT PRIMARY KEY,
+                                    TITLE VARCHAR(1024) NOT NULL,
+                                    DESCRIPTION VARCHAR(4096) NOT NULL,
+                                    TYPE_CODE VARCHAR(32) NOT NULL,
+                                    STATUS_CODE VARCHAR(32) NOT NULL,
+                                    PRIORITY_CODE VARCHAR(32) NOT NULL,
+                                    ESTIMATE INTEGER,
+                                    UPDATED TIMESTAMP,
+                                    PROJECT_ID BIGINT NOT NULL,
+                                    SPRINT_ID BIGINT,
+                                    PARENT_ID BIGINT,
+                                    STARTPOINT TIMESTAMP,
+                                    ENDPOINT TIMESTAMP,
+                                    CONSTRAINT FK_TASK_SPRINT FOREIGN KEY (SPRINT_ID) REFERENCES SPRINT (ID) ON DELETE SET NULL,
+                                    CONSTRAINT FK_TASK_PROJECT FOREIGN KEY (PROJECT_ID) REFERENCES PROJECT (ID) ON DELETE CASCADE,
+                                    CONSTRAINT FK_TASK_PARENT_TASK FOREIGN KEY (PARENT_ID) REFERENCES TASK (ID) ON DELETE CASCADE
+);
+
+
+INSERT INTO TASK (TITLE, TYPE_CODE, DESCRIPTION, STATUS_CODE, PRIORITY_CODE, PROJECT_ID, SPRINT_ID, STARTPOINT)
+values ('Data', 'epic', 'desc', 'in_progress', 1, 1, 1,
+        TIMESTAMPADD(SECOND, CAST((RANDOM() * 5 * 60) AS INT) + CAST((RANDOM() * 20) AS INT), CURRENT_TIMESTAMP));

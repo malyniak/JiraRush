@@ -27,6 +27,7 @@ CREATE TABLE IF NOT EXISTS SPRINT (
                                       STATUS_CODE VARCHAR(32) NOT NULL,
                                       STARTPOINT TIMESTAMP,
                                       ENDPOINT TIMESTAMP,
+                                      CODE varchar (512) not null,
                                       TITLE VARCHAR(1024) NOT NULL,
                                       PROJECT_ID BIGINT NOT NULL,
                                       CONSTRAINT FK_SPRINT_PROJECT FOREIGN KEY (PROJECT_ID) REFERENCES PROJECT(ID) ON DELETE CASCADE

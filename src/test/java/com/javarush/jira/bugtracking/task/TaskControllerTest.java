@@ -590,4 +590,12 @@ class TaskControllerTest extends AbstractControllerTest {
                 .andExpect(jsonPath("$.detail", is(String
                         .format("Not found assignment with userType=%s for task {%d} for user {%d}", TASK_DEVELOPER, TASK1_ID, ADMIN_ID))));
     }
+
+    @Test
+    @WithUserDetails(value = USER_MAIL)
+    void createTag() throws Exception {
+        perform(MockMvcRequestBuilders.post("/api/tasks/1/tags")
+                .param("tag", "testTag"))
+                .andExpect(status().isCreated());
+    }
 }

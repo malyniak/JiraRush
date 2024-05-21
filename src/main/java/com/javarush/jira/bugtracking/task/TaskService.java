@@ -39,6 +39,7 @@ public class TaskService {
     private final SprintRepository sprintRepository;
     private final TaskExtMapper extMapper;
     private final UserBelongRepository userBelongRepository;
+    private final TaskRepository taskRepository;
 
     @Transactional
     public void changeStatus(long taskId, String statusCode) {
@@ -130,6 +131,13 @@ public class TaskService {
                 .orElseThrow(() -> new NotFoundException(String
                         .format("Not found assignment with userType=%s for task {%d} for user {%d}", userType, id, userId)));
         assignment.setEndpoint(LocalDateTime.now());
+    }
+
+    @Transactional
+    public void createTag(long id, String tag) {
+        var task = Util.checkExist(id, handler.getRepository().findFullById(id));
+        task.getTags().add(tag);
+        taskRepository.save(task);
     }
 
     private void checkAssignmentActionPossible(long id, String userType, boolean assign) {
