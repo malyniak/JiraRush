@@ -10,6 +10,7 @@ import com.javarush.jira.profile.internal.ProfileMapper;
 import com.javarush.jira.profile.internal.ProfileRepository;
 import com.javarush.jira.profile.internal.model.Profile;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
@@ -31,6 +32,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
 
 class ProfileRestControllerTest extends AbstractControllerTest {
     private final static Long USER_ID = 1L;
@@ -54,7 +56,6 @@ class ProfileRestControllerTest extends AbstractControllerTest {
         context.setAuthentication(testingAuthenticationToken);
         SecurityContextHolder.setContext(context);
     }
-
     @Test
     void getProfile() throws Exception {
         var profile = new Profile();

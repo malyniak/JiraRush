@@ -158,3 +158,31 @@ CREATE TABLE IF NOT EXISTS TASK (
 INSERT INTO TASK (TITLE, TYPE_CODE, DESCRIPTION, STATUS_CODE, PRIORITY_CODE, PROJECT_ID, SPRINT_ID, STARTPOINT)
 values ('Data', 'epic', 'desc', 'in_progress', 1, 1, 1,
         TIMESTAMPADD(SECOND, CAST((RANDOM() * 5 * 60) AS INT) + CAST((RANDOM() * 20) AS INT), CURRENT_TIMESTAMP));
+
+create table if not exists ACTIVITY
+(
+    ID bigint primary key,
+    AUTHOR_ID     bigint not null,
+    TASK_ID       bigint not null,
+    UPDATED       timestamp,
+    COMMENT       varchar(4096),
+    TITLE         varchar(1024),
+    DESCRIPTION   varchar(4096),
+    ESTIMATE      integer,
+    TYPE_CODE     varchar(32),
+    STATUS_CODE   varchar(32),
+    PRIORITY_CODE varchar(32),
+    constraint FK_ACTIVITY_USERS foreign key (AUTHOR_ID) references USERS (ID),
+    constraint FK_ACTIVITY_TASK foreign key (TASK_ID) references TASK (ID) on delete cascade
+);
+
+
+INSERT INTO ACTIVITY(AUTHOR_ID, TASK_ID, UPDATED, COMMENT, TITLE, DESCRIPTION, ESTIMATE, TYPE_CODE, STATUS_CODE,
+                     PRIORITY_CODE)
+values (6, 1, '2023-05-15 09:05:10', null, 'Data',
+        null, 3, 'epic', 'in_progress', 'low'),
+       (5, 1, '2023-05-15 12:25:10', null, 'Data',
+        null, null, null, 'ready_for_review', 'normal'),
+       (6, 1, '2023-05-15 14:05:10', null, 'Data',
+        null, 4, null, 'done', null);
+
