@@ -49,7 +49,6 @@ spring:
       mode: always
 
 
-
   thymeleaf.check-template-location: false
 
   mvc.throw-exception-if-no-handler-found: true
@@ -70,4 +69,5 @@ server:
       charset: UTF-8 # Charset of HTTP requests and responses. Added to the "Content-Type" header if not set explicitly
       enabled: true # Enable http encoding support
       force: true
+
 springdoc.swagger-ui.path: /doc
