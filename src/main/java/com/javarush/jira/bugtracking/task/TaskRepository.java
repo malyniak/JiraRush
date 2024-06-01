@@ -40,7 +40,6 @@ public interface TaskRepository extends BaseRepository<Task> {
             """, nativeQuery = true)
     void setTaskAndSubTasksSprint(long taskId, Long sprintId);
 
-    //
     @Query("SELECT a.updated FROM Task t JOIN t.activities a WHERE a.statusCode = :statusCode")
     LocalDateTime findByStatusCode(String statusCode);
 }
